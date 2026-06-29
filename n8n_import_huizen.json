@@ -1,0 +1,81 @@
+{
+  "name": "WoonWens - Import Huizen Data naar Firestore",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-id",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        460,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "fileSelector": "/Users/ceesoddens/Library/CloudStorage/GoogleDrive-cees.oddens@gmail.com/Mijn Drive/PROJECTEN/AI/WoonWensDataScraper/klantenManagerApp/klanten-portaal---manager/huizen_data.json",
+        "options": {}
+      },
+      "id": "read-file",
+      "name": "Lees huizen_data.json",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        680,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "projectId": "de-woonwens-manager",
+        "collectionId": "huizen",
+        "documentId": "={{ $json.ID }}",
+        "dataMode": "auto",
+        "options": {}
+      },
+      "id": "firestore-node",
+      "name": "Google Cloud Firestore",
+      "type": "n8n-nodes-base.googleCloudFirestore",
+      "typeVersion": 1,
+      "position": [
+        900,
+        460
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "",
+          "name": "Google Cloud Firestore account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Lees huizen_data.json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lees huizen_data.json": {
+      "main": [
+        [
+          {
+            "node": "Google Cloud Firestore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

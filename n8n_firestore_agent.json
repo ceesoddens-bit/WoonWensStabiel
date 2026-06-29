@@ -1,0 +1,119 @@
+{
+  "name": "WoonWens AI Agent - Firestore Klanten",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "83bb8f7f-d890-410a-b5e1-8742b78a9c2d",
+      "name": "When chatting with agent",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1,
+      "position": [
+        380,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Je bent de slimme assistent van WoonWens Makelaardij. Je hebt toegang tot een tool waarmee je klantprofielen (zoekprofielen) kunt ophalen uit Firestore. Beantwoord de vragen van de gebruiker op basis van deze data."
+      },
+      "id": "c138df17-c878-433a-bc44-59cf3b1b6f00",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        600,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "id": "673f3240-e1b1-4c6c-851f-50604c5545f4",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        560,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "projectId": "de-woonwens-manager",
+        "collectionId": "klanten",
+        "returnAll": true
+      },
+      "id": "a4d334e0-f050-41fb-a9b0-96f7c8d7e003",
+      "name": "Haal Klantgegevens Op",
+      "type": "n8n-nodes-base.googleCloudFirestore",
+      "typeVersion": 1,
+      "position": [
+        780,
+        480
+      ],
+      "description": "Gebruik deze tool om alle bestaande klanten en hun wensen op te halen."
+    },
+    {
+      "parameters": {},
+      "id": "33b49ab0-94e6-42fc-a077-ef39cc423719",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.2,
+      "position": [
+        680,
+        480
+      ]
+    }
+  ],
+  "connections": {
+    "When chatting with agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Haal Klantgegevens Op": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}

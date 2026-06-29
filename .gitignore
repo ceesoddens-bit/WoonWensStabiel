@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+firebase-admin.json
+# Ignore local data dumps
+huizen_data.json
+klanten.json
+matches.json
+matches_from_firebase_admin.json
+scans.json
+fetch_matches.json
+fetch_output.json

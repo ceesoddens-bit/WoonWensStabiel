@@ -1,0 +1,147 @@
+{
+  "name": "WoonWens AI Agent - Firestore Klanten & Huizen",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-id",
+      "name": "When chatting with agent",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1,
+      "position": [
+        380,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Je bent de slimme assistent van WoonWens Makelaardij. Je hebt toegang tot tools waarmee je:\n1. Klantprofielen (zoekprofielen) kunt ophalen uit Firestore.\n2. Het actuele aanbod van huizen kunt ophalen uit Firestore.\n\nBeantwoord de vragen van de gebruiker op basis van deze data. Koppel de wensen van de klant aan de beschikbare huizen als daarom wordt gevraagd."
+      },
+      "id": "agent-id",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        600,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-pro",
+        "options": {}
+      },
+      "id": "model-id",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        500,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "projectId": "de-woonwens-manager",
+        "collectionId": "klanten",
+        "returnAll": true
+      },
+      "id": "firestore-tool-klanten-id",
+      "name": "Firestore: Klanten",
+      "type": "n8n-nodes-base.googleCloudFirestore",
+      "typeVersion": 1,
+      "position": [
+        750,
+        460
+      ],
+      "description": "Gebruik deze tool om alle KLANTEN en hun zoekprofielen uit de database op te halen."
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "projectId": "de-woonwens-manager",
+        "collectionId": "huizen",
+        "returnAll": true
+      },
+      "id": "firestore-tool-huizen-id",
+      "name": "Firestore: Huizen",
+      "type": "n8n-nodes-base.googleCloudFirestore",
+      "typeVersion": 1,
+      "position": [
+        900,
+        460
+      ],
+      "description": "Gebruik deze tool om alle HUIZEN en hun details uit de database op te halen."
+    },
+    {
+      "parameters": {},
+      "id": "memory-id",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        460
+      ]
+    }
+  ],
+  "connections": {
+    "When chatting with agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Firestore: Klanten": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Firestore: Huizen": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}

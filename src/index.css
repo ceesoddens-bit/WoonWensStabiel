@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Quicksand", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --sidebar-bg: #141e2b;
+  --header-text: #2d3e50;
+  --table-border: #d1d5db;
+  --badge-green: #58b19f;
+  --badge-red: #eb4d4b;
+  --badge-amber: #f9ca24;
+}
+
+body {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  /* iOS Safari fix: fixed attachment causes performance issues and visual bugs */
+  background-attachment: scroll;
+  color: #2d3e50;
+  font-family: var(--font-sans);
+  /* Safe area insets for notch/island devices */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* On larger screens, use fixed background for the nice parallax effect */
+@media (min-width: 768px) {
+  body {
+    background-attachment: fixed;
+    padding-bottom: 0;
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.table-header {
+  background-color: #f3f4f6;
+  font-weight: 700;
+  color: #2d3e50;
+  font-size: 1.1rem;
+}
+
+.badge {
+  padding: 2px 12px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-green { background-color: #58b19f; color: white; }
+.badge-red { background-color: #eb4d4b; color: white; }
+.badge-amber { background-color: #f9ca24; color: #2d3e50; }
+.badge-gray { background-color: #e5e7eb; color: #4b5563; }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Minimum touch target size for mobile accessibility (44x44px) */
+@media (max-width: 767px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+  /* Exception for inline icon-only buttons inside complex components */
+  .no-min-touch {
+    min-height: unset;
+  }
+}
+
+/* Bottom nav safe area padding for iOS home indicator */
+.bottom-nav-safe {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+@media print {
+  /* Hide UI elements that shouldn't be printed */
+  .no-print,
+  button,
+  nav,
+  header {
+    display: none !important;
+  }
+
+  /* Specific hide for background layers or sidebars if they have specific classes, but we will mostly rely on .no-print on containers */
+  body {
+    background: white !important;
+    color: black !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Force background colors to print (e.g. for badges and bars) */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Reset layout for printing */
+  .print-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white;
+    z-index: 9999;
+  }
+}

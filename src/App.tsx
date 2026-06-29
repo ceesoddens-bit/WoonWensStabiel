@@ -4914,19 +4914,28 @@ export default function App() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-[100] bg-gradient-to-br from-red-600 to-rose-800 flex flex-col items-center justify-center text-white"
+                  className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-slate-950/60 backdrop-blur-md"
                 >
-                  <div className="text-center space-y-6 px-4">
-                    <Heart className="w-32 h-32 animate-pulse mx-auto fill-white text-white filter drop-shadow-lg" />
-                    <h1 className="text-6xl font-black tracking-widest uppercase animate-bounce drop-shadow-md">
-                      Stabiele Versie
+                  <div className="glass-card max-w-md w-full p-8 text-center space-y-6 border border-white/20 shadow-2xl">
+                    <Heart className="w-24 h-24 animate-pulse mx-auto fill-red-500 text-red-500 filter drop-shadow-md" />
+                    
+                    <h1 className="text-3xl font-extrabold flex items-center justify-center tracking-tight gap-1">
+                      <span className="text-[#e67e22]">W</span>
+                      <span className="text-[#2d3e50]">oon</span>
+                      <span className="text-[#e74c3c]">W</span>
+                      <span className="text-[#2d3e50]">ens</span>
+                      <span className="text-[#2d3e50] ml-1.5">Stabiel</span>
                     </h1>
-                    <p className="text-xl opacity-90 max-w-md mx-auto font-medium">
-                      Dit is de definitieve back-up en stabiele versie van de WoonWensManager.
+
+                    <div className="h-px bg-slate-200 w-full my-2" />
+
+                    <p className="text-base text-[#2d3e50] font-semibold leading-relaxed">
+                      Dit is de definitieve, stabiele back-upversie van de WoonWensManager applicatie. Deze versie is beveiligd en wordt niet meer gewijzigd.
                     </p>
+
                     <button
                       onClick={() => setActiveView('nieuwste')}
-                      className="mt-8 px-8 py-4 bg-white text-red-600 font-extrabold rounded-full hover:bg-red-50 transition-all hover:scale-105 shadow-xl cursor-pointer"
+                      className="mt-6 w-full py-3.5 bg-[#e67e22] text-white font-bold rounded-xl hover:bg-[#d35400] active:scale-95 transition-all shadow-md cursor-pointer"
                     >
                       Terug naar het Dashboard
                     </button>

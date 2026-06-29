@@ -43,7 +43,8 @@ import {
   Download,
   ArrowRight,
   CheckSquare,
-  List
+  List,
+  Heart
 } from 'lucide-react';
 import TaskList from './TaskList';
 import { motion, AnimatePresence } from 'motion/react';
@@ -52,7 +53,7 @@ import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { db, auth } from './firebase';
 import Login from './Login';
 
-type View = 'nieuwste' | 'matches' | 'manager' | 'klanten' | 'blog-post-maker' | 'database' | 'tasks';
+type View = 'nieuwste' | 'matches' | 'manager' | 'klanten' | 'blog-post-maker' | 'database' | 'tasks' | 'stable';
 
 // Types for our data
 interface Viewing {
@@ -3762,10 +3763,16 @@ export default function App() {
       title={label}
       className={`p-3 rounded-lg transition-all duration-200 relative group ${activeView === view
           ? 'bg-[#34495e] text-[#e74c3c]'
-          : 'text-[#4db6ac] hover:bg-slate-800'
+          : view === 'stable'
+            ? 'text-red-500 hover:bg-slate-800'
+            : 'text-[#4db6ac] hover:bg-slate-800'
         }`}
     >
-      <Icon size={32} strokeWidth={1.5} />
+      <Icon 
+        size={32} 
+        strokeWidth={1.5} 
+        className={view === 'stable' ? 'fill-red-500 text-red-500 animate-pulse' : ''} 
+      />
       {activeView === view && (
         <div className="absolute left-[-12px] top-0 bottom-0 w-1.5 bg-[#e74c3c] rounded-r-full" />
       )}
@@ -3813,6 +3820,7 @@ export default function App() {
         <SidebarIcon view="blog-post-maker" icon={PenTool} label="Blog Post Maker" />
         <SidebarIcon view="database" icon={Database} label="Database" />
         <SidebarIcon view="tasks" icon={CheckSquare} label="Takenlijst" />
+        <SidebarIcon view="stable" icon={Heart} label="Stabiele Versie" />
         
         <div className="mt-auto mb-4">
           <button
@@ -4899,6 +4907,30 @@ export default function App() {
                   className="space-y-6"
                 >
                   <TaskList klanten={sortedKlantenLijst} scans={databaseScans} />
+                </motion.div>
+              ) : activeView === 'stable' ? (
+                <motion.div
+                  key="stable"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[100] bg-gradient-to-br from-red-600 to-rose-800 flex flex-col items-center justify-center text-white"
+                >
+                  <div className="text-center space-y-6 px-4">
+                    <Heart className="w-32 h-32 animate-pulse mx-auto fill-white text-white filter drop-shadow-lg" />
+                    <h1 className="text-6xl font-black tracking-widest uppercase animate-bounce drop-shadow-md">
+                      Stabiele Versie
+                    </h1>
+                    <p className="text-xl opacity-90 max-w-md mx-auto font-medium">
+                      Dit is de definitieve back-up en stabiele versie van de WoonWensManager.
+                    </p>
+                    <button
+                      onClick={() => setActiveView('nieuwste')}
+                      className="mt-8 px-8 py-4 bg-white text-red-600 font-extrabold rounded-full hover:bg-red-50 transition-all hover:scale-105 shadow-xl cursor-pointer"
+                    >
+                      Terug naar het Dashboard
+                    </button>
+                  </div>
                 </motion.div>
               ) : null}
             </AnimatePresence>
@@ -6073,6 +6105,15 @@ export default function App() {
           <BottomNavItem view="blog-post-maker" icon={PenTool} label="Blog" />
           <BottomNavItem view="database" icon={Database} label="DB" />
           <BottomNavItem view="tasks" icon={CheckSquare} label="Taken" />
+          <button
+            onClick={() => setActiveView('stable')}
+            className={`flex flex-col items-center justify-center flex-1 py-2 gap-1 transition-all duration-200 ${
+              activeView === 'stable' ? 'text-red-500' : 'text-red-500 hover:text-red-400'
+            }`}
+          >
+            <Heart size={22} className="fill-red-500 text-red-500 animate-pulse" strokeWidth={1.5} />
+            <span className="text-[9px] font-bold uppercase tracking-wider leading-none">Stabiel</span>
+          </button>
           <button
             onClick={() => signOut(auth)}
             className="flex flex-col items-center justify-center flex-1 py-2 gap-1 transition-all duration-200 text-slate-500 hover:text-red-400"
